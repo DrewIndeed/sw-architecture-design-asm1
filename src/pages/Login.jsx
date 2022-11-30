@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { Button, Form, Input, message, Typography } from "antd";
 import { PageWrapper } from "../components/containers";
 import { useNavigate } from "react-router-dom";
@@ -24,9 +25,7 @@ const Login = () => {
       form.resetFields();
       message.success(`Welcome back, ${username.toUpperCase()}`);
       localSet({ username, path, type });
-      setInterval(() => {
-        navigate(path);
-      }, 1000);
+      navigate(path);
     };
 
     // if matched admin info
@@ -56,74 +55,69 @@ const Login = () => {
     message.error(firstError);
   };
 
-  // form layout
-  const formLayout = {
-    labelCol: {
-      span: 6,
-    },
-    wrapperCol: {
-      span: 18,
-    },
-  };
-
   return (
     <PageWrapper>
-      <CenterFlex
-        className="w-screen h-screen bg-blue-900"
-        direction="column"
-        gap="20px"
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1.5 }}
       >
-        <div className="bg-[#fff] p-10 rounded-md transition-all duration-500 hover:scale-105 hover:shadow-xl">
-          <div className="text-blue-500 mb-8">
-            Welcome to
-            <Title level={4}>The Princess of Arena Cam Ranh Home</Title>
+        <CenterFlex
+          className="w-screen h-screen bg-gradient-to-r from-purple-400 to-red-500"
+          direction="column"
+        >
+          <div className="bg-[#fff] p-6 md:p-10 rounded-md transition-all duration-500 hover:shadow-xl m-10">
+            <div className="text-blue-500 mb-6">
+              Welcome to
+              <Title level={4}>The Princess of Arena Cam Ranh Home</Title>
+            </div>
+            <Form
+              form={form}
+              layout="vertical"
+              name="basic"
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <Form.Item
+                label="Username"
+                name="username"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your username",
+                  },
+                ]}
+              >
+                <Input placeholder="Username" />
+              </Form.Item>
+
+              <Form.Item
+                className="mb-[40px] mt-8"
+                label="Password"
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your password",
+                  },
+                ]}
+              >
+                <Input.Password placeholder="Password" />
+              </Form.Item>
+
+              <Button
+                block
+                type="primary"
+                htmlType="submit"
+                className="bg-blue-500"
+              >
+                Log In
+              </Button>
+            </Form>
           </div>
-          <Form
-            {...formLayout}
-            form={form}
-            name="basic"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
-            <Form.Item
-              label="Username"
-              name="username"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your username",
-                },
-              ]}
-            >
-              <Input placeholder="Username" />
-            </Form.Item>
-
-            <Form.Item
-              className="mb-[50px] mt-8"
-              label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your password",
-                },
-              ]}
-            >
-              <Input.Password placeholder="Password" />
-            </Form.Item>
-
-            <Button
-              block
-              type="primary"
-              htmlType="submit"
-              className="bg-blue-600"
-            >
-              Log In
-            </Button>
-          </Form>
-        </div>
-      </CenterFlex>
+        </CenterFlex>
+      </motion.div>
     </PageWrapper>
   );
 };
