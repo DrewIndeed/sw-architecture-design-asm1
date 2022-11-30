@@ -13,6 +13,7 @@
     "@ant-design/icons-react": "^2.0.1",
     "antd": "^5.0.2",
     "axios": "^1.2.0",
+    "framer-motion": "^7.6.15",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -20,7 +21,8 @@
     "react-router-dom": "^6.4.3",
     "store2": "^2.14.2",
     "styled-components": "^5.3.6",
-    "swr": "^1.3.0"
+    "swr": "^1.3.0",
+    "tailwind-scrollbar": "^2.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.24",

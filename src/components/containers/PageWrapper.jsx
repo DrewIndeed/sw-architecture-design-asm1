@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { localGet } from "../../auth";
+import { NavBar } from "../common";
 
-const PageWrapper = ({ pathTitle, children }) => {
+const PageWrapper = ({ pathTitle = "", hasNav = false, children = null }) => {
   // hooks
   const navigate = useNavigate();
   const location = useLocation();
@@ -11,7 +12,7 @@ const PageWrapper = ({ pathTitle, children }) => {
   // check if already logged in
   useEffect(() => {
     const currentUser = localGet("currentUser");
-    if (!currentUser) {
+    if (currentUser === null && location.pathname !== "/") {
       navigate("/", { replace: true });
       return;
     }
@@ -20,11 +21,11 @@ const PageWrapper = ({ pathTitle, children }) => {
     // else, navigate back to home of the current type of user
     navigate(
       (location.pathname.includes("admin") &&
-        currentUser.path.includes("admin")) ||
+        currentUser?.path.includes("admin")) ||
         (location.pathname.includes("visitor") &&
-          currentUser.path.includes("visitor"))
+          currentUser?.path.includes("visitor"))
         ? location.pathname
-        : currentUser.path,
+        : currentUser?.path,
       { replace: true }
     );
   }, []);
@@ -34,6 +35,7 @@ const PageWrapper = ({ pathTitle, children }) => {
       <Helmet>
         <title>{pathTitle}</title>
       </Helmet>
+      {hasNav && <NavBar />}
       {children}
     </>
   );
