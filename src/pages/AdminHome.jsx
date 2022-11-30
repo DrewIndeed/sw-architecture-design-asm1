@@ -1,7 +1,8 @@
 import React from "react";
+import { PageWrapper } from "../components/containers";
 
 const AdminHome = () => {
-  return <div>AdminHome</div>;
+  return <PageWrapper pathTitle="Admin Home">Admin Home</PageWrapper>;
 };
 
 export default AdminHome;

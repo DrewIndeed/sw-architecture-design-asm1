@@ -1,7 +1,8 @@
 import React from "react";
+import { PageWrapper } from "../components/containers";
 
 const VisitorHome = () => {
-  return <div>VisitorHome</div>;
+  return <PageWrapper pathTitle="Visitor Home">Visitor Home</PageWrapper>;
 };
 
 export default VisitorHome;
