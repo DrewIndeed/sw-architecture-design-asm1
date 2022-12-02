@@ -1,10 +1,16 @@
 import React, { useEffect } from "react";
+import { Skeleton } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { localGet } from "../../auth";
 import { NavBar } from "../common";
 
-const PageWrapper = ({ pathTitle = "", hasNav = false, children = null }) => {
+const PageWrapper = ({
+  pathTitle = "",
+  hasNav = false,
+  children = null,
+  isLoading = false,
+}) => {
   // hooks
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,7 +42,8 @@ const PageWrapper = ({ pathTitle = "", hasNav = false, children = null }) => {
         <title>{pathTitle}</title>
       </Helmet>
       {hasNav && <NavBar />}
-      {children}
+      {isLoading && <Skeleton active />}
+      {!isLoading && children}
     </>
   );
 };

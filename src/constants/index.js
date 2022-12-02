@@ -1,6 +1,15 @@
+import {
+  GiSwanBreeze,
+  GiGymBag,
+  GiBeachBucket,
+  GiPoolDive,
+} from "react-icons/gi";
+import { IoRestaurantSharp } from "react-icons/io5";
+import { MdOutlineBalcony } from "react-icons/md";
+
 export const TEST_ADMIN_1 = {
   username: "admin1",
-  password: "admin1-pwd",
+  passwo: "admin1-pwd",
 };
 
 export const TEST_VISITOR_1 = {
@@ -223,6 +232,15 @@ export const TEST_DATA = {
   },
 };
 
+export const UTILITIES_MAP = {
+  AC: GiSwanBreeze,
+  Terrace: MdOutlineBalcony,
+  Pool: GiPoolDive,
+  Gym: GiGymBag,
+  Restaurant: IoRestaurantSharp,
+  Beach: GiBeachBucket,
+};
+
 export const HOTEL_MODEL = {
   id: "",
   name: "",
@@ -248,15 +266,6 @@ export const HOTEL_MODEL = {
   utilities: [],
   allRooms: {},
 };
-
-export const UTILITIES_ENUM = [
-  "AC",
-  "Terrace",
-  "Pool",
-  "Gym",
-  "Restaurant",
-  "Beach",
-];
 
 export const ROOM_MODEL = {
   name: "",

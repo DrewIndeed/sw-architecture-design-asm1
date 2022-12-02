@@ -42,6 +42,7 @@ const NavBar = () => {
       z-100 sticky top-0 bg-[#29353ad0] hover:bg-[#29353a] 
       transition-all flex justify-between align-middle ease-linear 
       px-10 md:px-16 py-3 mx-auto z-[100] xl:items-center
+      drop-shadow-[0_3px_8px_rgba(255,255,255,0.1)]
       "
     >
       <img src={LogoForDark} alt="logo for dark" className="w-[200px]" />
