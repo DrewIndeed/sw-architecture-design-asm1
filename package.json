@@ -13,7 +13,7 @@
   },
   "engines": {
     "npm": ">=9.1.2",
-    "node": "18.x"
+    "node": "19.x"
   },
   "scripts": {
     "dev": "vite",

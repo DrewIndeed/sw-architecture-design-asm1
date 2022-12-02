@@ -402,7 +402,8 @@ const BookingModal = ({
             setBookingsModalOn(false);
             setTimeout(() => {
               setModalOn(false);
-            }, 1000);
+              window.location.reload();
+            }, 1200);
           }}
           danger
           block
