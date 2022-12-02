@@ -45,7 +45,7 @@ const PageWrapper = ({
       {hasNav && <NavBar setModalOn={setModalOn} />}
       {isLoading && <Skeleton className="h-screen w-screen" active />}
       {!isLoading && children}
-      <Footer setModalOn={setModalOn} />
+      {hasNav && <Footer setModalOn={setModalOn} />}
     </>
   );
 };

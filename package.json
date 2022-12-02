@@ -1,8 +1,20 @@
 {
   "name": "eeet2582-asm1-s3820098",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "description": "New generation website for The Princess of Arena Cam Ranh Home",
+  "author": "Le Nguyen Truong An",
+  "license": "MIT",
+  "homepage": "https://github.com/DrewIndeed/sw-architecture-design-asm1#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DrewIndeed/sw-architecture-design-asm1.git"
+  },
+  "engines": {
+    "npm": ">=9.1.2",
+    "node": ">=19.1.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
