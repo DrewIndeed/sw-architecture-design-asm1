@@ -3,7 +3,7 @@ import { Skeleton } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { localGet } from "../../auth";
-import { NavBar } from "../common";
+import { NavBar, Footer } from "../common";
 
 const PageWrapper = ({
   pathTitle = "",
@@ -44,6 +44,7 @@ const PageWrapper = ({
       {hasNav && <NavBar />}
       {isLoading && <Skeleton active />}
       {!isLoading && children}
+      <Footer />
     </>
   );
 };

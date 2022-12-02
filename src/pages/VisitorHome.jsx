@@ -1,9 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { HomeFilled, ClockCircleFilled, PhoneFilled } from "@ant-design/icons";
 import { PageWrapper } from "../components/containers";
-import { CenterFlex } from "../components/containers";
-import { TEST_DATA, UTILITIES_MAP } from "../constants";
+import { TEST_DATA } from "../constants";
 import { useHotelApiFetcher } from "../hooks/useApiFetcher";
 import {
   VisitorWelcomeSection,
