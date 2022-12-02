@@ -78,8 +78,9 @@ export const TEST_DATA = {
   utilities: ["AC", "Terrace", "Pool", "Gym", "Restaurant", "Beach"],
   allRooms: {
     single: {
+      capacity: 2,
       size: 36,
-      rate: 200,
+      rate: 100,
       quantity: 5,
       available: 5,
       data: [
@@ -116,8 +117,9 @@ export const TEST_DATA = {
       ],
     },
     double: {
+      capacity: 4,
       size: 72,
-      rate: 400,
+      rate: 200,
       quantity: 5,
       available: 5,
       data: [
@@ -154,8 +156,9 @@ export const TEST_DATA = {
       ],
     },
     seaView: {
-      size: 48,
-      rate: 500,
+      capacity: 6,
+      size: 72,
+      rate: 300,
       quantity: 5,
       available: 5,
       data: [
@@ -192,8 +195,9 @@ export const TEST_DATA = {
       ],
     },
     parkView: {
+      capacity: 8,
       size: 48,
-      rate: 450,
+      rate: 400,
       quantity: 5,
       available: 5,
       data: [

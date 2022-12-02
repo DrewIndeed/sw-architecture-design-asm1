@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import moment from "moment";
 import {
   Button,
   Divider,
@@ -13,16 +14,135 @@ import {
 const { RangePicker } = DatePicker;
 
 const BookingModal = ({
-  form,
-  onFinish,
-  onFinishFailed,
-  isModalOn,
   setModalOn,
-  isSubmitting,
-  setSubmitting,
-  isBookedSuccess,
-  setBookedSuccess,
+  isModalOn,
+  data,
+  setCurrentBookings,
+  currentBookings,
 }) => {
+  const [form] = Form.useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isBookedSuccess, setBookedSuccess] = useState(false);
+  const [roomTypeTracking, setRoomTypeTracking] = useState("");
+
+  // make new body with updated data before PUT to database
+  const updateRoomData = ({ data, formData }) => {
+    const copyAllRooms = { ...data.allRooms };
+    const roomTypeData = copyAllRooms[formData.roomType];
+
+    // 1. check if there is enough space
+    const isEnoughSpace = roomTypeData.capacity >= formData.numberOfPeople;
+
+    // 2. check if available
+    const availableRooms = roomTypeData.data.filter(
+      (room) => room.status === 0
+    );
+    const isAvailable = availableRooms.length > 0;
+
+    if (!isAvailable) {
+      message.error(
+        "We're so sorry. No available room matches your needs at the moment"
+      );
+      return;
+    }
+
+    // 3. calculate the price
+    const calculatedPriceUSD = roomTypeData.rate * formData.duration;
+    const calculatedPriceVND = calculatedPriceUSD * 23000;
+
+    // 4. update the available room data
+    const targetAvaiRoomCopy = (isAvailable && availableRooms[0]) || {};
+    const targetAvaiRoomIndx = roomTypeData.data.indexOf(targetAvaiRoomCopy);
+    const finalAvaiRoomData = {
+      ...targetAvaiRoomCopy,
+      startDate: formData.dates.startDate,
+      endDate: formData.dates.endDate,
+      status: 1,
+    };
+
+    // 5. update the room data in the whole hotel data
+    const available = roomTypeData.available - 1;
+    data.allRooms[formData.roomType].available = available;
+    data.allRooms[formData.roomType].data[targetAvaiRoomIndx] = {
+      ...finalAvaiRoomData,
+    };
+
+    const trackingBooking = {
+      fullDesStr: `A ${formData.roomType} room for ${formData.numberOfPeople} people from ${formData.dates.startDate} to ${formData.dates.endDate}, meaning ${formData.duration} day(s).`,
+      dateStr: `From ${formData.dates.startDate} to ${formData.dates.endDate}`,
+      durationStr: `${formData.duration} days`,
+      roomType: formData.roomType,
+      payUsd: calculatedPriceUSD,
+      payVnd: calculatedPriceVND,
+      size: data.allRooms[formData.roomType].size,
+    };
+    setCurrentBookings([...currentBookings, trackingBooking]);
+
+    setTimeout(() => {
+      form.resetFields();
+      setIsSubmitting(false);
+      setBookedSuccess(true);
+      message.success("Successfully booked your room ❤️");
+      console.log(data.allRooms[formData.roomType]);
+    }, 2000);
+  };
+
+  // form success
+  const onFinish = (values) => {
+    const startDate = values.dates[0].format("YYYY-MM-DD");
+    const endStart = values.dates[1].format("YYYY-MM-DD");
+    const processedStartTime = moment(startDate);
+    const processedEndTime = moment(endStart);
+    const duration = moment
+      .duration(processedEndTime.diff(processedStartTime))
+      .asDays();
+
+    const formData = {
+      ...values,
+      numberOfPeople: parseInt(values.numberOfPeople, 10),
+      dates: {
+        startDate: values.dates[0].format("YYYY-MM-DD"),
+        endDate: values.dates[1].format("YYYY-MM-DD"),
+      },
+      duration,
+    };
+
+    // console.log(formData);
+    updateRoomData({ formData, data });
+  };
+
+  // form failure
+  const onFinishFailed = (errorInfo) => {
+    const firstError = errorInfo.errorFields[0].errors[0];
+    message.error(firstError);
+    setIsSubmitting(false);
+  };
+
+  // handle when room type is changed
+  const handleRoomTypeChange = (value) => {
+    setRoomTypeTracking(value);
+    form.resetFields(["dates", "numberOfPeople"]);
+  };
+
+  // handle when people try to input number of people wrongly
+  const handleNumberOfPeopleChange = (e) => {
+    if (
+      parseInt(e.target.value, 10) >
+      parseInt(data?.allRooms[roomTypeTracking]?.capacity || 0, 10)
+    ) {
+      form.setFieldValue(
+        "numberOfPeople",
+        parseInt(data?.allRooms[roomTypeTracking]?.capacity || 0, 10)
+      );
+      return;
+    }
+
+    if (parseInt(e.target.value, 10) < 1) {
+      form.setFieldValue("numberOfPeople", 1);
+      return;
+    }
+  };
+
   return (
     <Modal
       bodyStyle={{ height: "60vh", overflow: "auto" }}
@@ -65,6 +185,7 @@ const BookingModal = ({
           <Select
             disabled={isSubmitting}
             defaultValue=""
+            onChange={handleRoomTypeChange}
             options={[
               {
                 value: "",
@@ -117,15 +238,23 @@ const BookingModal = ({
           rules={[
             {
               required: true,
-              message: "Valid number of people: 1 to 40",
+              message: `Valid number for a ${roomTypeTracking} room: 1 to ${
+                data?.allRooms[roomTypeTracking]?.capacity || 0
+              } people`,
+              min: 1,
+              max: parseInt(
+                data?.allRooms[roomTypeTracking]?.capacity || 0,
+                10
+              ),
             },
           ]}
         >
           <Input
-            disabled={isSubmitting}
+            disabled={isSubmitting || roomTypeTracking === ""}
+            onChange={handleNumberOfPeopleChange}
             type="number"
             min={1}
-            max={40}
+            max={parseInt(data?.allRooms[roomTypeTracking]?.capacity || 0, 10)}
             className="w-full"
             defaultValue={0}
           />
@@ -136,24 +265,30 @@ const BookingModal = ({
           type="primary"
           htmlType="submit"
           className="bg-blue-500 mt-[40px]"
-          onClick={() => setSubmitting(true)}
+          onClick={() => setIsSubmitting(true)}
           block
         >
-          Confirm Booking
-        </Button>
-
-        <Button disabled={!isBookedSuccess} className="mt-[20px]" block>
-          Show Current Booking
+          Confirm New Booking
         </Button>
 
         <Button
-          disabled={!isBookedSuccess}
+          disabled={isSubmitting || !isBookedSuccess}
+          className="mt-[20px]"
+          block
+        >
+          Show Current Bookings
+        </Button>
+
+        <Button
+          disabled={isSubmitting || !isBookedSuccess}
           type="primary"
           className="mt-[20px]"
           onClick={() => {
             message.success("Looking great! Let's proceed to payment ...");
             setBookedSuccess(false);
-            // setModalOn(false);
+            setTimeout(() => {
+              setModalOn(false);
+            }, 1000);
           }}
           danger
           block
