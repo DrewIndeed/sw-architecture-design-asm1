@@ -5,11 +5,12 @@ import { LogoForDark } from "../../assets";
 import { Dropdown, Space, message } from "antd";
 import { DownOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { CenterFlex } from "../containers";
-import { localClear } from "../../auth";
+import { localClear, localGet } from "../../auth";
 
 const NavBar = ({ setModalOn }) => {
   // hooks
   const navigate = useNavigate();
+  const currentUser = localGet("currentUser");
 
   // handle logout
   const onLogOut = (e) => {
@@ -63,7 +64,9 @@ const NavBar = ({ setModalOn }) => {
           className="bg-[#ff5252] text-white text-[1rem] px-8 py-3 rounded-md"
         >
           <Dropdown
-            menu={{ items }}
+            menu={{
+              items: currentUser.type === "visitor" ? items : items.slice(2),
+            }}
             placement="bottomRight"
             arrow={{ pointAtCenter: true }}
           >

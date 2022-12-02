@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PageWrapper } from "../components/containers";
 import { BookingModal } from "../components/individual";
-import { TEST_DATA } from "../constants";
 import { useHotelApiFetcher } from "../hooks/useApiFetcher";
 import {
   VisitorWelcomeSection,
@@ -23,7 +22,6 @@ const VisitorHome = () => {
     { id: "6386efe6a3c728450edb2e3d" }
   );
 
-  // TODO: hotelById?.data?.record for TEST_DATA
   return (
     <PageWrapper
       hasNav
