@@ -37,9 +37,9 @@ const VisitorHome = () => {
           {...{
             setModalOn,
             isModalOn,
-            data: TEST_DATA,
             setCurrentBookings,
             currentBookings,
+            data: TEST_DATA,
           }}
         />
         <VisitorWelcomeSection record={TEST_DATA} />

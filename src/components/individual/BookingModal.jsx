@@ -9,7 +9,10 @@ import {
   Modal,
   Select,
   DatePicker,
+  Card,
 } from "antd";
+import { MdSingleBed, MdKingBed, MdAttachMoney } from "react-icons/md";
+import { localGet } from "../../auth";
 
 const { RangePicker } = DatePicker;
 
@@ -24,14 +27,12 @@ const BookingModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isBookedSuccess, setBookedSuccess] = useState(false);
   const [roomTypeTracking, setRoomTypeTracking] = useState("");
+  const [isBookingsModalOn, setBookingsModalOn] = useState(false);
 
   // make new body with updated data before PUT to database
   const updateRoomData = ({ data, formData }) => {
     const copyAllRooms = { ...data.allRooms };
     const roomTypeData = copyAllRooms[formData.roomType];
-
-    // 1. check if there is enough space
-    const isEnoughSpace = roomTypeData.capacity >= formData.numberOfPeople;
 
     // 2. check if available
     const availableRooms = roomTypeData.data.filter(
@@ -67,14 +68,19 @@ const BookingModal = ({
       ...finalAvaiRoomData,
     };
 
+    // compute booking ticket
+    const currentUser = localGet("currentUser");
     const trackingBooking = {
+      customerId: currentUser.username,
       fullDesStr: `A ${formData.roomType} room for ${formData.numberOfPeople} people from ${formData.dates.startDate} to ${formData.dates.endDate}, meaning ${formData.duration} day(s).`,
       dateStr: `From ${formData.dates.startDate} to ${formData.dates.endDate}`,
       durationStr: `${formData.duration} days`,
+      durationValue: formData.duration,
       roomType: formData.roomType,
       payUsd: calculatedPriceUSD,
       payVnd: calculatedPriceVND,
       size: data.allRooms[formData.roomType].size,
+      rate: data.allRooms[formData.roomType].rate,
     };
     setCurrentBookings([...currentBookings, trackingBooking]);
 
@@ -83,7 +89,7 @@ const BookingModal = ({
       setIsSubmitting(false);
       setBookedSuccess(true);
       message.success("Successfully booked your room ❤️");
-      console.log(data.allRooms[formData.roomType]);
+      console.log(data);
     }, 2000);
   };
 
@@ -159,10 +165,82 @@ const BookingModal = ({
     >
       <Divider
         orientation="center"
-        style={{ fontSize: "1.75rem", fontWeight: "bold" }}
+        style={{
+          fontSize: "1.5rem",
+          fontWeight: "bold",
+          color: "rgb(59,130,246)",
+        }}
       >
         Booking Now is Too Simple!
       </Divider>
+
+      <Modal
+        bodyStyle={{ height: "60vh", overflow: "auto" }}
+        open={isBookingsModalOn}
+        onCancel={() => {
+          setBookingsModalOn(false);
+        }}
+        onOk={() => {
+          setBookingsModalOn(false);
+        }}
+        maskClosable
+        closable
+        footer={null}
+      >
+        <div className="w-full h-full flex flex-col gap-2 py-4 pr-4 overflow-y-auto">
+          <Divider
+            orientation="center"
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: "bold",
+              color: "rgb(59,130,246)",
+            }}
+          >
+            Current Bookings Overview
+          </Divider>
+          <div className="w-full h-full flex flex-col gap-8 overflow-y-auto shadow-md p-5 rounded-lg">
+            {currentBookings &&
+              currentBookings.map(
+                (
+                  { fullDesStr, payUsd, payVnd, roomType, durationValue, rate },
+                  idx
+                ) => {
+                  return (
+                    <Card
+                      title={`Booking #${idx + 1}`}
+                      key={`Booking #${idx + 1}`}
+                      className="hover:shadow-md transition-shadow duration-300"
+                      bordered
+                    >
+                      <p className="flex gap-4">
+                        {roomType === "single" ? (
+                          <MdSingleBed className="text-[2.5rem]" />
+                        ) : (
+                          <MdKingBed className="text-[2.5rem]" />
+                        )}
+
+                        {fullDesStr}
+                      </p>
+                      <p className="flex gap-4 mt-2">
+                        <MdAttachMoney className="text-[1.5rem]" />
+                        <span>
+                          {`${rate} x ${durationValue} = ${payUsd}`}{" "}
+                          <strong>USD</strong>
+                        </span>
+                      </p>
+                      <p className="flex gap-4 mt-2">
+                        <MdAttachMoney className="text-[1.5rem]" />
+                        <span>
+                          {payVnd} <strong>VND</strong>
+                        </span>
+                      </p>
+                    </Card>
+                  );
+                }
+              )}
+          </div>
+        </div>
+      </Modal>
 
       <Form
         form={form}
@@ -274,6 +352,9 @@ const BookingModal = ({
         <Button
           disabled={isSubmitting || !isBookedSuccess}
           className="mt-[20px]"
+          onClick={() => {
+            setBookingsModalOn(true);
+          }}
           block
         >
           Show Current Bookings
@@ -286,6 +367,9 @@ const BookingModal = ({
           onClick={() => {
             message.success("Looking great! Let's proceed to payment ...");
             setBookedSuccess(false);
+            setCurrentBookings([]);
+            setRoomTypeTracking(false);
+            setBookingsModalOn(false);
             setTimeout(() => {
               setModalOn(false);
             }, 1000);
