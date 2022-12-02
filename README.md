@@ -28,6 +28,23 @@
 
 ![Visitor Home Page](https://i.imgur.com/A8ZHyp0.jpg "Visitor Home Page")
 
+## Best Features
+
+- Custom Logo
+
+
+- Simple Login Logout
+
+
+- Simple booking with remote UPDATE API
+
+
+- Stunning photos galleries
+
+
+- Simple admin dashboard to update information at USERS view
+
+
 ## Prerequisites
 
 - npm >=9.1.2
@@ -80,7 +97,7 @@ Username: admin1
 Password: admin1-pwd
 ```
 
-### Relating to bookings
+### Visitors: relating to bookings
 
 - To begin booking process, hover at More button on navigation bar and select Booking Now
 
@@ -96,14 +113,20 @@ Password: admin1-pwd
 
 - The end of the Booking Flow is Check Out, which is paying for bookings. However, due to time limitation, it has not been implemented. By this reason, ONLY remote JSON is updated and simple message is displayed.
 
+### Admin: relating to updating info
+
+- Due to time limitation, admin can only update the name, address and description of the hotel.
+
+- Info are AUTOMATICALLY REVALIDATED on UI after they are updated successfully
+
 ## Author
 
 👤 **Le Nguyen Truong An**
 
-* Website: https://www.linkedin.com/in/truonganln/
-* Github: [@DrewIndeed](https://github.com/DrewIndeed)
 * LinkedIn: [@https:\/\/www.linkedin.com\/in\/truonganln\/](https://linkedin.com/in/https:\/\/www.linkedin.com\/in\/truonganln\/)
 * Student Email: s3820098@rmit.edu.vn
+* Personal Email: truongan1730@gmail.com
+* Github: [@DrewIndeed](https://github.com/DrewIndeed)
 
 ## Dependencies Overview
 
