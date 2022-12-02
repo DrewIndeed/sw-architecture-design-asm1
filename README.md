@@ -33,6 +33,9 @@
 - Custom Logo
 
 
+- FULLY responsive
+
+
 - Simple Login Logout
 
 
