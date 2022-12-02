@@ -2,7 +2,7 @@ import React from "react";
 import { LogoForDarkWhite } from "../../assets";
 import { CenterFlex } from "../containers";
 
-const Footer = () => {
+const Footer = ({ setModalOn = () => {} }) => {
   return (
     <CenterFlex className="h-[90vh] bg-black">
       <CenterFlex gap="35px" direction="column">

@@ -10,6 +10,7 @@ const PageWrapper = ({
   hasNav = false,
   children = null,
   isLoading = false,
+  setModalOn = () => {},
 }) => {
   // hooks
   const navigate = useNavigate();
@@ -41,10 +42,10 @@ const PageWrapper = ({
       <Helmet>
         <title>{pathTitle}</title>
       </Helmet>
-      {hasNav && <NavBar />}
-      {isLoading && <Skeleton active />}
+      {hasNav && <NavBar setModalOn={setModalOn} />}
+      {isLoading && <Skeleton className="h-screen w-screen" active />}
       {!isLoading && children}
-      <Footer />
+      <Footer setModalOn={setModalOn} />
     </>
   );
 };

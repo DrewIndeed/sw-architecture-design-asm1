@@ -7,7 +7,7 @@ import { DownOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { CenterFlex } from "../containers";
 import { localClear } from "../../auth";
 
-const NavBar = () => {
+const NavBar = ({ setModalOn }) => {
   // hooks
   const navigate = useNavigate();
 
@@ -24,11 +24,22 @@ const NavBar = () => {
   const items = [
     {
       label: (
+        <button onClick={() => setModalOn(true)} className="flex align-middle">
+          Booking Now
+        </button>
+      ),
+      key: "0",
+    },
+    {
+      type: "divider",
+    },
+    {
+      label: (
         <button onClick={onLogOut} className="flex align-middle">
           Log Me Out <PoweroffOutlined className="pt-[4px] ml-2" />
         </button>
       ),
-      key: "0",
+      key: "1",
     },
   ];
 
@@ -59,7 +70,7 @@ const NavBar = () => {
             <a onClick={(e) => e.preventDefault()}>
               <Space>
                 More
-                <DownOutlined className="mb-[6px]" />
+                <DownOutlined className="mb-[2px]" />
               </Space>
             </a>
           </Dropdown>
