@@ -13,15 +13,15 @@ const VisitorHome = () => {
   const [currentBookings, setCurrentBookings] = useState([]);
   const [isModalOn, setModalOn] = useState(false);
 
-  useEffect(() => {
-    console.log(currentBookings);
-  }, [currentBookings]);
+  // useEffect(() => {
+  //   console.log(currentBookings);
+  // }, [currentBookings]);
 
   // fetch data from jsonbin.io
-  // const { data: hotelById, isLoading: hotelByIdLoading } = useHotelApiFetcher(
-  //   "hotelById",
-  //   { id: "6386efe6a3c728450edb2e3d" }
-  // );
+  const { data: hotelById, isLoading: hotelByIdLoading } = useHotelApiFetcher(
+    "hotelById",
+    { id: "6386efe6a3c728450edb2e3d" }
+  );
 
   // TODO: hotelById?.data?.record for TEST_DATA
   return (
@@ -29,24 +29,24 @@ const VisitorHome = () => {
       hasNav
       pathTitle="Visitor Home"
       setModalOn={setModalOn}
-      // isLoading={hotelByIdLoading}
+      isLoading={hotelByIdLoading}
     >
-      {/* {!hotelByIdLoading && hotelById && ( */}
-      <div className="relative">
-        <BookingModal
-          {...{
-            setModalOn,
-            isModalOn,
-            setCurrentBookings,
-            currentBookings,
-            data: TEST_DATA,
-          }}
-        />
-        <VisitorWelcomeSection record={TEST_DATA} />
-        <VisitorFirstSection record={TEST_DATA} />
-        <VisitorSecondSection record={TEST_DATA} />
-      </div>
-      {/* )} */}
+      {!hotelByIdLoading && hotelById && (
+        <div className="relative">
+          <BookingModal
+            {...{
+              setModalOn,
+              isModalOn,
+              setCurrentBookings,
+              currentBookings,
+              data: hotelById?.data?.record,
+            }}
+          />
+          <VisitorWelcomeSection record={hotelById?.data?.record} />
+          <VisitorFirstSection record={hotelById?.data?.record} />
+          <VisitorSecondSection record={hotelById?.data?.record} />
+        </div>
+      )}
     </PageWrapper>
   );
 };

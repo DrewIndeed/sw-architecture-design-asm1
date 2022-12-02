@@ -12,6 +12,8 @@ import {
   Card,
 } from "antd";
 import { MdSingleBed, MdKingBed, MdAttachMoney } from "react-icons/md";
+import { hotelSWRKeys } from "../../hooks/useApiFetcher";
+import { hotelApiFetcher } from "../../api";
 import { localGet } from "../../auth";
 
 const { RangePicker } = DatePicker;
@@ -28,9 +30,12 @@ const BookingModal = ({
   const [isBookedSuccess, setBookedSuccess] = useState(false);
   const [roomTypeTracking, setRoomTypeTracking] = useState("");
   const [isBookingsModalOn, setBookingsModalOn] = useState(false);
+  const [finalUpdateData, setFinalUpdateData] = useState({});
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   // make new body with updated data before PUT to database
   const updateRoomData = ({ data, formData }) => {
+    const currentUser = localGet("currentUser");
     const copyAllRooms = { ...data.allRooms };
     const roomTypeData = copyAllRooms[formData.roomType];
 
@@ -59,6 +64,7 @@ const BookingModal = ({
       startDate: formData.dates.startDate,
       endDate: formData.dates.endDate,
       status: 1,
+      customerId: currentUser.username,
     };
 
     // 5. update the room data in the whole hotel data
@@ -69,7 +75,6 @@ const BookingModal = ({
     };
 
     // compute booking ticket
-    const currentUser = localGet("currentUser");
     const trackingBooking = {
       customerId: currentUser.username,
       fullDesStr: `A ${formData.roomType} room for ${formData.numberOfPeople} people from ${formData.dates.startDate} to ${formData.dates.endDate}, meaning ${formData.duration} day(s).`,
@@ -89,7 +94,8 @@ const BookingModal = ({
       setIsSubmitting(false);
       setBookedSuccess(true);
       message.success("Successfully booked your room ❤️");
-      console.log(data);
+      // console.log(data);
+      setFinalUpdateData(data);
     }, 2000);
   };
 
@@ -132,8 +138,10 @@ const BookingModal = ({
 
   // handle when people try to input number of people wrongly
   const handleNumberOfPeopleChange = (e) => {
+    const processValue =
+      e.target.value.length > 1 ? e.target.value[0] : e.target.value;
     if (
-      parseInt(e.target.value, 10) >
+      parseInt(processValue, 10) >
       parseInt(data?.allRooms[roomTypeTracking]?.capacity || 0, 10)
     ) {
       form.setFieldValue(
@@ -143,9 +151,29 @@ const BookingModal = ({
       return;
     }
 
-    if (parseInt(e.target.value, 10) < 1) {
+    if (parseInt(processValue, 10) < 1) {
       form.setFieldValue("numberOfPeople", 1);
       return;
+    }
+  };
+
+  // [IMPORTANT] Update database
+  const updateRoomDatabase = async (data) => {
+    try {
+      const res = await hotelApiFetcher(hotelSWRKeys.hotelById, {
+        id: "6386efe6a3c728450edb2e3d",
+        method: "put",
+        data,
+      });
+
+      const resStatus = await res.status;
+      if (resStatus === 200) {
+        setIsCheckingOut(false);
+        message.success("Updated Rooms Successfully!");
+      }
+    } catch (error) {
+      setIsCheckingOut(false);
+      message.error(error.message);
     }
   };
 
@@ -365,6 +393,8 @@ const BookingModal = ({
           type="primary"
           className="mt-[20px]"
           onClick={() => {
+            setIsCheckingOut(true);
+            updateRoomDatabase(finalUpdateData);
             message.success("Looking great! Let's proceed to payment ...");
             setBookedSuccess(false);
             setCurrentBookings([]);
