@@ -11,7 +11,10 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="admin/home" element={<AdminHome />} />
           <Route path="visitor/home" element={<VisitorHome />} />
-          <Route path="*" element={<p>No path to be found</p>} />
+          <Route
+            path="*"
+            element={<p className="text-white">No path to be found</p>}
+          />
         </Routes>
       </BrowserRouter>
     </HelmetProvider>

@@ -63,7 +63,7 @@ const Login = () => {
         transition={{ duration: 1.5 }}
       >
         <CenterFlex
-          className="w-screen h-screen bg-gradient-to-r from-purple-400 to-red-500"
+          className="w-screen h-screen bg-gradient-to-r from-[#F7AB0A]/50 to-[#ff6052]/80"
           direction="column"
         >
           <div className="bg-[#fff] p-6 md:p-10 rounded-md transition-all duration-500 hover:shadow-xl m-10">
