@@ -54,7 +54,7 @@
 ## Prerequisites
 
 - npm >=9.1.2
-- node >=19.1.0
+- node 18.x
 
 ## Install
 
@@ -137,6 +137,12 @@ Password: admin1-pwd
 ## Dependencies Overview
 
 ![Dependencies Overview](https://i.imgur.com/ra0zPzE.png "Dependencies Overview")
+
+### Known bugs
+
+- If you encounter this when refreshing visitor home or any page, go to the URL bar and direct your URL to '/', meaning root path. The page will auto redirect to the right page again:
+
+![Refresh Bug](https://i.imgur.com/2diTIZE.png "Refresh Bug")
 
 ## Show your support
 

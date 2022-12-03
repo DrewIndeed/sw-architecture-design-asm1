@@ -138,22 +138,17 @@ const BookingModal = ({
 
   // handle when people try to input number of people wrongly
   const handleNumberOfPeopleChange = (e) => {
-    const processValue =
-      e.target.value.length > 1 ? e.target.value[0] : e.target.value;
     if (
-      parseInt(processValue, 10) >
-      parseInt(data?.allRooms[roomTypeTracking]?.capacity || 0, 10)
+      parseInt(e.target.value, 10) >
+        parseInt(data?.allRooms[roomTypeTracking]?.capacity || 0, 10) ||
+      parseInt(e.target.value, 10) < 1
     ) {
-      form.setFieldValue(
-        "numberOfPeople",
-        parseInt(data?.allRooms[roomTypeTracking]?.capacity || 0, 10)
+      form.setFieldValue("numberOfPeople", "");
+      message.error(
+        `Valid number for a ${roomTypeTracking} room: 1 to ${
+          data?.allRooms[roomTypeTracking]?.capacity || 0
+        } people`
       );
-      return;
-    }
-
-    if (parseInt(processValue, 10) < 1) {
-      form.setFieldValue("numberOfPeople", 1);
-      return;
     }
   };
 
