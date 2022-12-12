@@ -2,6 +2,7 @@ import React from "react";
 import { ClockCircleFilled, HomeFilled, PhoneFilled } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import { UTILITIES_MAP } from "../../constants";
+import { ThirdBanner } from "../../assets";
 
 const VisitorWelcomeSection = ({ record }) => {
   const { name, address, checkInTime, checkOutTime, owner, utilities } = record;
@@ -106,7 +107,7 @@ const VisitorWelcomeSection = ({ record }) => {
             transition={{ duration: 1.5, delay: 4 }}
             viewport={{ once: true }}
             className="rounded-lg object-cover shadow-2xl absolute h-[725px]"
-            src="https://scontent.fsgn5-8.fna.fbcdn.net/v/t39.30808-6/285657421_109698695102362_5977931359669394541_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=e3f864&_nc_ohc=6VHqPypc3LAAX9aDwC-&_nc_ht=scontent.fsgn5-8.fna&oh=00_AfB9JaW6blXVU_ae1czF6hh9_R_XCBZYs7X46oRE1ONpVA&oe=638E2009"
+            src={ThirdBanner}
             alt=""
           />
         </div>
