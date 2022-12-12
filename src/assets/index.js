@@ -5,4 +5,11 @@ import LogoForDarkWhite from "./logo-for-dark-white.png";
 import LogoForLight from "./logo-for-light.png";
 import ThirdBanner from "./third-banner.jpeg";
 
-export { LogoOrg, LogoOrgCropped, LogoForDark, LogoForDarkWhite, LogoForLight };
+export {
+  LogoOrg,
+  LogoOrgCropped,
+  LogoForDark,
+  LogoForDarkWhite,
+  LogoForLight,
+  ThirdBanner,
+};
